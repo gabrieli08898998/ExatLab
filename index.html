@@ -1,398 +1,876 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suporte para Monitores - Projeto BattleMind</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ExataLab — Plataforma de Suporte para Monitores</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css">
+<meta name="description" content="Plataforma ExataLab: suporte, jogos educativos, materiais e gamificação para monitores."/>
+<!-- VLibras (opcional online) -->
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 
-    <!-- VLibras -->
-    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<style>
+  /* ===== Reset básico e tipografia ===== */
+  :root{
+    --bg: #f3f8ff;
+    --glass: rgba(255,255,255,0.7);
+    --card:#ffffff;
+    --primary:#133b7a;
+    --accent:#36d684;
+    --muted:#6b7280;
+    --danger:#ef4444;
+    --radius:14px;
+    --glass-2: rgba(255,255,255,0.85);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;
+    background:linear-gradient(180deg,var(--bg),#e7f0ff);
+    color:#07223b; -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.45;
+  }
+  a{color:inherit}
+  button{font-family:inherit}
+  /* Skip link for screen readers */
+  .skiplink{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+  .skiplink:focus{left:10px;top:10px;width:auto;height:auto;padding:8px 12px;background:#000;color:#fff;border-radius:6px;z-index:9999}
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+  /* ===== NAVBAR ===== */
+  nav{
+    position:sticky;top:0;z-index:999;background:linear-gradient(90deg,var(--primary),#0f2f5a);
+    color:white;padding:12px 6%;display:flex;align-items:center;justify-content:space-between;gap:12px;
+    box-shadow:0 6px 24px rgba(10,20,60,.12);
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{
+    width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#1db36d);
+    display:flex;align-items:center;justify-content:center;font-weight:800;color:#042034;font-size:18px;
+    box-shadow:0 8px 30px rgba(3,10,30,.12)
+  }
+  nav .navlinks{display:flex;gap:18px;align-items:center}
+  nav a{color:white;text-decoration:none;font-weight:600}
+  .controls{display:flex;gap:8px;align-items:center}
 
-        /* ESTILO GERAL */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #eef2f7;
-            color: #333;
-            margin: 0;
-            transition: background 0.3s, color 0.3s;
-        }
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:10px;border:0;background:var(--accent);
+    color:#042034;font-weight:700;cursor:pointer;box-shadow:0 8px 20px rgba(54,214,132,.12)
+  }
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.12);color:#fff}
+  .btn.stop{background:var(--danger);color:#fff}
 
-        /* ALTO CONTRASTE */
-        body.high-contrast {
-            background: #000 !important;
-            color: #fff !important;
-        }
+  /* ===== HERO ===== */
+  .hero{
+    display:grid;grid-template-columns:1fr 420px;gap:28px;padding:56px 6% 36px 6%;align-items:center;
+    background:linear-gradient(180deg,rgba(19,59,122,.96),rgba(12,33,78,.92));
+    color:#fff;border-bottom-left-radius:40px;border-bottom-right-radius:40px;box-shadow:0 20px 60px rgba(6,18,42,.25);
+  }
+  .hero h1{font-size:2.6rem;margin:0;line-height:1.03}
+  .hero h1 span{color:var(--accent)}
+  .hero p{opacity:.9;margin-top:10px;font-size:1.05rem}
+  .hero .cta{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .card-hero{background:var(--glass-2);padding:18px;border-radius:16px;color:#07223b;box-shadow:0 12px 40px rgba(5,10,30,.08)}
 
-        body.high-contrast nav,
-        body.high-contrast footer {
-            background: #000 !important;
-        }
+  /* ===== LAYOUT ===== */
+  main{padding:36px 6%;display:grid;grid-template-columns:2fr 1fr;gap:26px;margin-top:18px}
+  @media (max-width:980px){.hero{grid-template-columns:1fr;}.hero p{font-size:1rem}.hero h1{font-size:2rem} main{grid-template-columns:1fr}}
 
-        /* NAVBAR */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 10%;
-            background: linear-gradient(90deg, #1f4e9e, #163e7e);
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
-            position: sticky;
-            top: 0;
-            z-index: 999;
-        }
+  h2{color:var(--primary);margin:0 0 12px 0;font-size:1.3rem}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 35px;
-        }
+  .card{background:var(--card);padding:16px;border-radius:var(--radius);box-shadow:0 12px 36px rgba(15,30,60,.06);transition:transform .16s ease}
+  .card:hover{transform:translateY(-6px)}
 
-        nav ul li a {
-            color: white;
-            font-weight: 600;
-            text-decoration: none;
-            transition: .3s;
-            font-size: 1rem;
-        }
+  .small{font-size:.92rem;color:var(--muted)}
 
-        nav ul li a:hover {
-            color: #36d684;
-        }
+  /* SIDEBAR */
+  aside.sidebar{position:sticky;top:96px;align-self:start}
+  .sidebar .box{background:linear-gradient(180deg,#fff,#f6fbff);padding:14px;border-radius:12px}
 
-        .acessibilidade button {
-            background: #36d684;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            color: white;
-            font-size: .9rem;
-            transition: .2s;
-        }
+  /* GAMES area */
+  .games-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .game-card{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+  .game-card h4{margin:0}
 
-        .acessibilidade button:hover {
-            background: #2db671;
-            transform: scale(1.05);
-        }
+  /* FOOTER */
+  footer{margin-top:28px;padding:26px 6%;background:linear-gradient(90deg,#0c2a55,var(--primary));color:#fff;border-top-left-radius:18px;border-top-right-radius:18px}
+  footer a{color:#fff;text-decoration:none}
 
-        /* HEADER */
-        header {
-            padding: 130px 8%;
-            text-align: center;
-            background: linear-gradient(135deg, #1f4e9e, #102c55);
-            color: white;
-            animation: fadeInPage 1s ease-in-out;
-        }
+  /* HIGH CONTRAST (aplicado via class) */
+  body.high-contrast{
+    background:#000;color:#fff !important;
+  }
+  body.high-contrast .card, body.high-contrast .box, body.high-contrast .card-hero{
+    background:#000;border:2px solid #fff;color:#fff !important;box-shadow:none
+  }
+  body.high-contrast a, body.high-contrast button{color:#fff;background:#000;border:1px solid #fff}
+  body.high-contrast .logo{background:#fff;color:#000}
 
-        @keyframes fadeInPage {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
+  /* MICROS */
+  .meta{font-size:.9rem;color:rgba(255,255,255,.9)}
+  .profile{display:flex;gap:12px;align-items:center}
+  .avatar{width:54px;height:54px;border-radius:12px;background:linear-gradient(135deg,#e6f9f0,#d1f0e8);display:flex;align-items:center;justify-content:center;font-weight:800;color:#036}
+  input,select,textarea{font-family:inherit;padding:10px;border-radius:10px;border:1px solid #e6eef8}
+  label{display:block;font-weight:700;margin-bottom:6px}
+  .muted{color:var(--muted);font-size:.9rem}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+  /* quiz styles */
+  .quiz-answers{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .opt{padding:10px;border-radius:10px;border:1px solid #e7eef8;background:#fff;cursor:pointer;text-align:left}
+  .opt.correct{background:#e9fbef;border-color:#36d684}
+  .opt.wrong{background:#ffecec;border-color:#ef4444}
 
-        header h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-        }
+  /* crossword simplified */
+  .crossword{display:flex;flex-direction:column;gap:8px}
+  .cw-row{display:flex;gap:6px}
+  .cw-cell{width:38px;height:38px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .cw-cell input{width:100%;height:100%;border:0;background:transparent;text-align:center;font-weight:700}
 
-        header h1 span {
-            color: #36d684;
-        }
+  /* admin */
+  .admin{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-        header p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            margin-top: 12px;
-        }
+  /* small footer */
+  .mini{font-size:.85rem;color:rgba(255,255,255,.85)}
 
-        .btn-main {
-            margin-top: 30px;
-            padding: 16px 40px;
-            font-size: 1.25rem;
-            background: #36d684;
-            border: none;
-            color: white;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: .25s;
-        }
-
-        .btn-main:hover {
-            transform: scale(1.08);
-            background: #2db671;
-        }
-
-        /* SEÇÕES */
-        section {
-            padding: 80px 10%;
-            animation: fadeInSection .8s ease;
-        }
-
-        @keyframes fadeInSection {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        h2 {
-            color: #1f4e9e;
-            font-size: 2.3rem;
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        h2::after {
-            content: '';
-            width: 80px;
-            height: 4px;
-            background: #36d684;
-            position: absolute;
-            left: 0;
-            bottom: -10px;
-            border-radius: 6px;
-        }
-
-        /* CRONOGRAMA */
-        .cronograma {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 22px;
-        }
-
-        .dia {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 25px rgba(0, 0, 0, .1);
-            transition: .3s;
-        }
-
-        .dia:hover {
-            transform: translateY(-8px);
-        }
-
-        /* CARDS */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, .1);
-            transition: .3s;
-        }
-
-        .card:hover {
-            transform: scale(1.06);
-        }
-
-        .card i {
-            font-size: 2.5rem;
-            color: #1f4e9e;
-        }
-
-        button.game-btn {
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: #1f4e9e;
-            border: none;
-            color: white;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: .2s;
-        }
-
-        button.game-btn:hover {
-            background: #163f7c;
-            transform: scale(1.05);
-        }
-
-        /* FOOTER */
-        footer {
-            background: #1f4e9e;
-            color: white;
-            padding: 50px 10%;
-            margin-top: 40px;
-            text-align: center;
-        }
-
-        footer h3 {
-            margin-bottom: 10px;
-        }
-
-        .copyright {
-            background: #173a6a;
-            text-align: center;
-            color: white;
-            padding: 15px 0;
-        }
-    </style>
-
+</style>
 </head>
-
 <body>
 
-    <!-- VLibras -->
-    <div vw class="enabled">
-        <div vw-access-button class="active"></div>
-        <div vw-plugin-wrapper>
-            <div class="vw-plugin-top-wrapper"></div>
-        </div>
+<a href="#maincontent" class="skiplink">Pular para conteúdo</a>
+
+<!-- VLibras widget -->
+<div vw class="enabled" aria-hidden="true">
+  <div vw-access-button class="active"></div>
+  <div vw-plugin-wrapper>
+    <div class="vw-plugin-top-wrapper"></div>
+  </div>
+</div>
+
+<nav role="navigation" aria-label="Menu principal">
+  <div class="brand" aria-hidden="false">
+    <div class="logo" aria-hidden="true">EX</div>
+    <div>
+      <div style="font-weight:800">ExataLab</div>
+      <div class="small" style="opacity:.9">Plataforma de Monitores</div>
+    </div>
+  </div>
+
+  <div class="navlinks" role="menubar" aria-label="Navegação">
+    <a href="#home" role="menuitem">Home</a>
+    <a href="#games" role="menuitem">Games</a>
+    <a href="#resources" role="menuitem">Materiais</a>
+    <a href="#profile" role="menuitem">Perfil</a>
+    <a href="#admin" role="menuitem">Admin</a>
+  </div>
+
+  <div class="controls" role="region" aria-label="Controles de acessibilidade">
+    <button id="contrastBtn" class="btn ghost" aria-pressed="false" title="Ativar alto contraste">Alto Contraste</button>
+    <button id="voiceBtn" class="btn" aria-pressed="false" title="Ler conteúdo">Ler (Play/Pause)</button>
+    <button id="stopVoice" class="btn stop" title="Parar leitura">Parar</button>
+    <!-- voice settings -->
+    <select id="voiceSelect" aria-label="Selecionar voz" style="margin-left:8px;padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,.12)">
+      <option value="">Voz (automática)</option>
+    </select>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="home" role="banner">
+  <div class="hero-left">
+    <h1>Plataforma de Suporte para Monitores — <span>ExataLab</span></h1>
+    <p class="meta">Recursos, jogos educativos, guias e uma comunidade para transformar monitores em referência didática. Tudo acessível, interativo e pronto para sala de aula.</p>
+
+    <div class="cta">
+      <button id="ctaExplore" class="btn">Explorar Recursos</button>
+      <button id="ctaGames" class="btn ghost">Ir para Games</button>
+      <button id="ctaSignup" class="btn">Criar Conta</button>
     </div>
 
-    <nav>
-        <ul>
-            <li><a href="#cronograma" onclick="stopReading()">Cronograma</a></li>
-            <li><a href="#calendario" onclick="stopReading()">Calendário</a></li>
-            <li><a href="#gamificacao" onclick="stopReading()">Games</a></li>
+    <div style="margin-top:16px" class="card-hero">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-weight:800">Quick Stats</div>
+          <div class="small">Usuários ativos hoje: <strong id="statUsers">0</strong></div>
+        </div>
+        <div style="text-align:right">
+          <div class="small">XP total</div>
+          <div style="font-weight:800;font-size:20px" id="statXP">0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card" aria-hidden="false" style="text-align:center">
+      <div style="font-size:14px;color:var(--muted)">Acesso rápido</div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">
+        <button class="btn" onclick="openGames('fisica')">Palavras Cruzadas - Física</button>
+        <button class="btn" onclick="openGames('matematica')">Palavras Cruzadas - Matemática</button>
+        <button class="btn" onclick="openGames('quiz')">Quiz (Kahoot)</button>
+        <button class="btn" onclick="openGames('desafio')">Desafio Lógico</button>
+      </div>
+      <div class="small" style="margin-top:12px">Dica: clique e abra os jogos em aba separada para uso rápido em sala.</div>
+    </div>
+  </div>
+</header>
+
+<main id="maincontent" role="main">
+  <!-- left: conteúdo -->
+  <section aria-labelledby="o-que-oferecemos">
+    <h2 id="o-que-oferecemos">O que oferecemos</h2>
+    <div class="grid">
+      <article class="card" aria-labelledby="r1">
+        <h3 id="r1">Recursos & Materiais</h3>
+        <p class="small">Pacote de PDFs resumidos, planos de aula, slides e checklist.</p>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" onclick="fakeDownload('Pacote_Pedagogico.zip')">Baixar Pacote</button>
+          <button class="btn ghost" onclick="openModal('upload')">Enviar Material</button>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="r2">
+        <h3 id="r2">Treinamento para Monitores</h3>
+        <p class="small">Webinars e trilhas de aprendizagem pra prática docente.</p>
+        <div style="margin-top:12px">
+          <button class="btn" onclick="openModal('train')">Ver Cursos</button>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="r3">
+        <h3 id="r3">Comunidade & Fórum</h3>
+        <p class="small">Espaço para troca de experiências, resolução de dúvidas e mentorias.</p>
+        <div style="margin-top:12px">
+          <button class="btn" onclick="openModal('forum')">Entrar no Fórum</button>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="r4">
+        <h3 id="r4">Conteúdo Pedagógico Rápido</h3>
+        <p class="small">Guias práticos com exemplos resolvidos e atividades para sala.</p>
+        <div style="margin-top:12px">
+          <button class="btn" onclick="openModal('guides')">Ver Guias</button>
+        </div>
+      </article>
+    </div>
+
+    <!-- Cronograma + Calendário -->
+    <div style="display:flex;gap:16px;margin-top:18px;flex-wrap:wrap">
+      <div class="card" style="flex:1;min-width:280px">
+        <h4>Cronograma Semanal</h4>
+        <ul class="small">
+          <li><strong>Segunda:</strong> Física (Cinemática)</li>
+          <li><strong>Terça:</strong> Matemática (Álgebra)</li>
+          <li><strong>Quarta:</strong> Química (Termodinâmica)</li>
+          <li><strong>Quinta:</strong> Programação (Lógica)</li>
         </ul>
+      </div>
 
-        <div class="acessibilidade">
-            <button onclick="toggleContrast(); stopReading()">Alto Contraste</button>
-            <button onclick="lerPagina()">Ler Página</button>
-        </div>
-    </nav>
-
-    <header>
-        <h1>Suporte para Monitores <span>Exata Lab</span></h1>
-        <p>Ferramentas e suporte para elevar seu potencial como monitor.</p>
-        <button class="btn-main" onclick="stopReading()">Explorar Suporte</button>
-    </header>
-
-    <!-- CRONOGRAMA -->
-    <section id="cronograma">
-        <h2>Cronograma de Monitores</h2>
-        <div class="cronograma">
-            <div class="dia">
-                <h3>Segunda-feira</h3>
-                <p>Monitor: João da Silva</p>
-                <p>Atividade: Física - Cinemática</p>
-            </div>
-            <div class="dia">
-                <h3>Terça-feira</h3>
-                <p>Monitor: Maria Oliveira</p>
-                <p>Atividade: Matemática - Álgebra</p>
-            </div>
-            <div class="dia">
-                <h3>Quarta-feira</h3>
-                <p>Monitor: Pedro Souza</p>
-                <p>Atividade: Física - Leis de Newton</p>
-            </div>
-            <div class="dia">
-                <h3>Quinta-feira</h3>
-                <p>Monitor: Ana Lima</p>
-                <p>Atividade: Matemática - Equações Diferenciais</p>
-            </div>
-            <div class="dia">
-                <h3>Sexta-feira</h3>
-                <p>Monitor: Carlos Martins</p>
-                <p>Atividade: Física - Termodinâmica</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- CALENDÁRIO -->
-    <section id="calendario">
-        <h2>Calendário de Eventos</h2>
-        <div class="dia">
-            <p><strong>25 de Outubro:</strong> Feira de Ciências - Inovações Tecnológicas</p>
-            <p><strong>15 de Novembro:</strong> Olimpíada de Matemática</p>
-            <p><strong>10 de Dezembro:</strong> Encontro de Monitores</p>
-        </div>
-    </section>
-
-    <!-- GAMIFICAÇÃO -->
-    <section id="gamificacao">
-        <h2>Atividades de Gamificação</h2>
-
-        <div class="features">
-            <div class="card">
-                <i class="ri-grid-fill"></i>
-                <h4>Palavras Cruzadas - Física</h4>
-                <p>Descubra conceitos fundamentais brincando.</p>
-                <button class="game-btn" onclick="stopReading()">Jogar</button>
-            </div>
-
-            <div class="card">
-                <i class="ri-function-line"></i>
-                <h4>Palavras Cruzadas - Matemática</h4>
-                <p>Desafios para ativar o raciocínio lógico.</p>
-                <button class="game-btn" onclick="stopReading()">Jogar</button>
-            </div>
-
-            <div class="card">
-                <i class="ri-question-answer-line"></i>
-                <h4>Quiz</h4>
-                <p>Teste sua mente e lidere o ranking!</p>
-                <button class="game-btn" onclick="stopReading()">Iniciar Quiz</button>
-            </div>
-
-            <div class="card">
-                <i class="ri-brain-line"></i>
-                <h4>Desafio Lógico</h4>
-                <p>Problemas para desafiar sua lógica.</p>
-                <button class="game-btn" onclick="stopReading()">Resolver</button>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <h3>ExataLab • 2025</h3>
-        <p>Conectando monitores e transformando o aprendizado.</p>
-    </footer>
-
-    <div class="copyright">
-        © 2025 ExataLab - Todos os direitos reservados
+      <div class="card" style="width:320px">
+        <h4>Próximos Eventos</h4>
+        <p class="small"><strong>25 Out:</strong> Feira de Ciências — Inovações Tecnológicas</p>
+        <p class="small"><strong>15 Nov:</strong> Olimpíada de Matemática — Etapa Regional</p>
+        <p class="small"><strong>10 Dez:</strong> Encontro de Monitores — Feedback & Networking</p>
+      </div>
     </div>
 
-    <script>
-        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    <!-- Games embutidos (abas internas) -->
+    <section id="games" style="margin-top:18px">
+      <h2>Games (embutidos)</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Quiz Rápido (integrado)</h3>
+          <p class="small">Perguntas curtas com timer—perfeito pra revisar matéria.</p>
+          <div id="quizArea">
+            <div id="quizQuestion" style="font-weight:700">Clique em Iniciar Quiz</div>
+            <div id="quizAnswers" class="quiz-answers"></div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button id="startQuiz" class="btn">Iniciar Quiz</button>
+              <button id="nextQuiz" class="btn ghost">Próxima</button>
+              <div id="quizTimer" class="small" style="margin-left:auto">--</div>
+            </div>
+            <div class="small" style="margin-top:8px">Pontuação: <span id="quizScore">0</span></div>
+          </div>
+        </div>
 
-        let leitura;
+        <div class="card">
+          <h3>Palavras Cruzadas Simplificada</h3>
+          <p class="small">Versão compacta para uso rápido em sala.</p>
+          <div class="crossword" id="crosswordArea">
+            <div class="cw-row" id="cwRow1"></div>
+            <div class="cw-row" id="cwRow2"></div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button id="checkCW" class="btn">Verificar</button>
+              <button id="revealCW" class="btn ghost">Revelar</button>
+            </div>
+            <div id="cwHint" class="small" style="margin-top:8px"></div>
+          </div>
+        </div>
 
-        function lerPagina() {
-            stopReading();
-            const texto = document.body.innerText;
-            leitura = new SpeechSynthesisUtterance(texto);
-            leitura.lang = "pt-BR";
-            window.speechSynthesis.speak(leitura);
-        }
+        <div class="card">
+          <h3>Desafio Lógico</h3>
+          <p class="small">Puzzles de raciocínio rápido.</p>
+          <div id="desafioArea">
+            <div id="desafioQ" style="font-weight:700">Clique em Iniciar</div>
+            <div style="margin-top:8px;display:flex;gap:8px">
+              <button id="startDesafio" class="btn">Iniciar</button>
+              <button id="checkDesafio" class="btn ghost">Verificar</button>
+            </div>
+            <div id="desafioAns" class="small" style="margin-top:8px"></div>
+          </div>
+        </div>
 
-        function stopReading() {
-            if (window.speechSynthesis.speaking) {
-                window.speechSynthesis.cancel();
-            }
-        }
+        <div class="card">
+          <h3>Links para jogos externos</h3>
+          <p class="small">Se quiser algo mais robusto, abra estas opções:</p>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+            <button class="btn" onclick="openGames('quiz')">Kahoot (Quiz)</button>
+            <button class="btn" onclick="openGames('fisica')">Puzzle Maker — Física</button>
+            <button class="btn" onclick="openGames('desafio')">ProProfs Logic Puzzles</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        function toggleContrast() {
-            document.body.classList.toggle("high-contrast");
-        }
-    </script>
+  </section>
 
+  <!-- right: sidebar -->
+  <aside class="sidebar" aria-labelledby="profileTitle">
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div class="small">Bem vindo,</div>
+          <div style="font-weight:800" id="displayName">Visitante</div>
+          <div class="muted" id="displayEmail">—</div>
+        </div>
+        <div class="avatar" id="avatar">M</div>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="small">XP</div>
+        <div style="font-weight:800" id="xp">0</div>
+        <div class="small" style="margin-top:8px">Medalhas: <span id="medalCount">0</span></div>
+      </div>
+
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button class="btn" onclick="openModal('signup')">Entrar / Criar</button>
+        <button class="btn ghost" onclick="openModal('profile')">Perfil</button>
+      </div>
+    </div>
+
+    <div class="box" style="margin-top:12px">
+      <h4>Leaderboard Local</h4>
+      <ol id="leaderboard" class="small" style="padding-left:16px;margin:6px 0"></ol>
+      <div style="margin-top:8px"><button class="btn" onclick="clearLeaderboard()">Reset Leaderboard</button></div>
+    </div>
+
+    <div class="box" style="margin-top:12px">
+      <h4>Admin (mock)</h4>
+      <div class="admin">
+        <button class="btn" onclick="openModal('adminImport')">Importar Conteúdo</button>
+        <button class="btn ghost" onclick="openModal('adminStats')">Ver Stats</button>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<!-- Footer -->
+<footer role="contentinfo">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <div>
+      <div style="font-weight:800">ExataLab</div>
+      <div class="mini">Plataforma • 2025</div>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center">
+      <a href="#resources" onclick="stopReading()">Contato</a>
+      <a href="#" onclick="stopReading()">Termos</a>
+      <a href="#" onclick="stopReading()">Privacidade</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Modals simples -->
+<div id="modal" aria-hidden="true" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px">
+  <div id="modalBox" style="width:900px;max-width:98%;background:linear-gradient(180deg,#fff,#f8fbff);border-radius:14px;padding:18px;box-shadow:0 30px 80px rgba(5,10,30,.3)">
+    <div id="modalTitle" style="font-weight:800;margin-bottom:8px">Modal</div>
+    <div id="modalBody" style="max-height:60vh;overflow:auto"></div>
+    <div style="text-align:right;margin-top:12px"><button class="btn" onclick="closeModal()">Fechar</button></div>
+  </div>
+</div>
+
+<script>
+/* ============================
+   CONFIGURAÇÕES GLOBAIS E TTS
+   ============================ */
+
+/* VLibras init if available */
+if(window.VLibras) new window.VLibras.Widget('https://vlibras.gov.br/app');
+
+/* --- Speech synthesis: single declaration only --- */
+const synth = window.speechSynthesis;
+let utter = null;
+let isPaused = false;
+
+/* populate voiceSelect */
+function populateVoices() {
+  const select = document.getElementById('voiceSelect');
+  const voices = synth.getVoices();
+  select.innerHTML = '<option value="">Voz automática</option>';
+  voices.forEach((v,i)=> {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${v.name} — ${v.lang}`;
+    select.appendChild(opt);
+  });
+}
+populateVoices();
+if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = populateVoices;
+
+/* build filtered read text */
+function buildReadableText() {
+  const parts = [];
+  // read main headings, sections, important buttons and cards
+  document.querySelectorAll('header h1, main h2, main h3, .card h3, .card h4, .small, .meta, nav a').forEach(el=>{
+    const txt = (el.innerText || '').trim();
+    if(txt && txt.length>1) parts.push(txt);
+  });
+  return parts.join('. ');
+}
+
+/* Voice control functions */
+function playOrPauseReading() {
+  // if nothing queued and not speaking -> start
+  if(!synth.speaking && !utter) {
+    const text = buildReadableText();
+    if(!text) return;
+    utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'pt-BR';
+    utter.rate = 1;
+    utter.pitch = 1;
+    utter.volume = 1;
+    // assign chosen voice if selected
+    const select = document.getElementById('voiceSelect');
+    const voices = synth.getVoices();
+    if(select && select.value) {
+      const idx = parseInt(select.value);
+      if(voices[idx]) utter.voice = voices[idx];
+    }
+    utter.onend = () => { utter = null; isPaused = false; document.getElementById('voiceBtn').setAttribute('aria-pressed','false'); };
+    synth.speak(utter);
+    document.getElementById('voiceBtn').setAttribute('aria-pressed','true');
+    return;
+  }
+
+  // if speaking and not paused -> pause
+  if(synth.speaking && !synth.paused) {
+    synth.pause();
+    isPaused = true;
+    document.getElementById('voiceBtn').setAttribute('aria-pressed','true');
+    return;
+  }
+
+  // if paused -> resume
+  if(synth.paused) {
+    synth.resume();
+    isPaused = false;
+    document.getElementById('voiceBtn').setAttribute('aria-pressed','true');
+    return;
+  }
+}
+
+function stopReading() {
+  if(synth.speaking || synth.paused) {
+    synth.cancel();
+  }
+  utter = null;
+  isPaused = false;
+  try{ document.getElementById('voiceBtn').setAttribute('aria-pressed','false'); }catch(e){}
+}
+
+/* Buttons linkage */
+document.getElementById('voiceBtn').addEventListener('click', playOrPauseReading);
+document.getElementById('stopVoice').addEventListener('click', stopReading);
+
+/* alto contraste */
+document.getElementById('contrastBtn').addEventListener('click', ()=>{
+  document.body.classList.toggle('high-contrast');
+  const pressed = document.body.classList.contains('high-contrast');
+  document.getElementById('contrastBtn').setAttribute('aria-pressed', pressed ? 'true' : 'false');
+});
+
+/* CTA quick navigation */
+document.getElementById('ctaExplore').addEventListener('click', ()=>{ stopReading(); window.scrollTo({top:document.querySelector('main').offsetTop-60,behavior:'smooth'})});
+document.getElementById('ctaGames').addEventListener('click', ()=>{ stopReading(); document.getElementById('games').scrollIntoView({behavior:'smooth'})});
+document.getElementById('ctaSignup').addEventListener('click', ()=>{ openModal('signup') });
+
+/* ============================
+   PROFILE / XP / MEDALS
+   ============================ */
+function loadProfile() {
+  const profile = JSON.parse(localStorage.getItem('exatalab_profile') || 'null');
+  if(profile) {
+    document.getElementById('displayName').innerText = profile.name || 'Monitor';
+    document.getElementById('displayEmail').innerText = profile.email || '—';
+    document.getElementById('avatar').innerText = (profile.name || 'M').slice(0,1).toUpperCase();
+    document.getElementById('xp').innerText = profile.xp || 0;
+    document.getElementById('medalCount').innerText = (profile.medals || []).length;
+    document.getElementById('statXP').innerText = profile.xp || 0;
+  }
+}
+loadProfile();
+
+function saveProfile(profile) {
+  localStorage.setItem('exatalab_profile', JSON.stringify(profile));
+  loadProfile();
+}
+
+/* XP + medal helpers */
+function addXP(amount) {
+  const p = JSON.parse(localStorage.getItem('exatalab_profile') || '{}') || {};
+  p.xp = (p.xp || 0) + amount;
+  saveProfile(p);
+  // global stat
+  let globalXP = parseInt(localStorage.getItem('exatalab_global_xp')||'0'); globalXP += amount;
+  localStorage.setItem('exatalab_global_xp', globalXP); document.getElementById('statXP').innerText = globalXP;
+}
+function addMedal(name) {
+  const p = JSON.parse(localStorage.getItem('exatalab_profile') || '{}') || {};
+  p.medals = p.medals || [];
+  if(!p.medals.includes(name)) { p.medals.push(name); saveProfile(p); }
+}
+
+/* ============================
+   LEADERBOARD (localStorage)
+   ============================ */
+function getBoard(){ return JSON.parse(localStorage.getItem('exatalab_board')||'[]'); }
+function renderBoard(){
+  const board = getBoard();
+  const ol = document.getElementById('leaderboard'); ol.innerHTML = '';
+  board.sort((a,b)=>b.score-a.score).slice(0,10).forEach(u=>{
+    const li = document.createElement('li'); li.innerText = `${u.name} — ${u.score} pts`; ol.appendChild(li);
+  });
+}
+renderBoard();
+function addToBoard(name,score){
+  const board = getBoard(); board.push({name,score,date:new Date().toISOString()}); localStorage.setItem('exatalab_board', JSON.stringify(board)); renderBoard();
+}
+function clearLeaderboard(){ localStorage.removeItem('exatalab_board'); renderBoard(); alert('Leaderboard resetado (local).'); }
+
+/* ============================
+   QUIZ SIMPLES
+   ============================ */
+const sampleQuestions = [
+  {q:'Qual a unidade de força no SI?', opts:['Newton','Joule','Watt','Pascal'], a:0, t:18},
+  {q:'Velocidade média é dada por?', opts:['d/t','v*t','m*a','F=ma'], a:0, t:12},
+  {q:'Raiz quadrada de 81?', opts:['7','8','9','10'], a:2, t:10}
+];
+let quizIndex=0, quizScore=0, quizTimerInterval=null, quizTimeLeft=0;
+
+function startQuiz(){
+  quizIndex=0; quizScore=0; document.getElementById('quizScore').innerText=0;
+  loadQuizQuestion();
+}
+
+function loadQuizQuestion(){
+  clearInterval(quizTimerInterval);
+  const Q = sampleQuestions[quizIndex];
+  if(!Q){ document.getElementById('quizQuestion').innerText='Quiz finalizado.'; addToBoardPrompt(); return; }
+  document.getElementById('quizQuestion').innerText = Q.q;
+  const area = document.getElementById('quizAnswers'); area.innerHTML='';
+  Q.opts.forEach((opt,i)=>{
+    const b = document.createElement('button'); b.className='opt'; b.innerText=opt;
+    b.addEventListener('click', ()=> selectAnswer(i,b));
+    area.appendChild(b);
+  });
+  quizTimeLeft = Q.t; document.getElementById('quizTimer').innerText = `Tempo: ${quizTimeLeft}s`;
+  quizTimerInterval = setInterval(()=>{ quizTimeLeft--; document.getElementById('quizTimer').innerText = `Tempo: ${quizTimeLeft}s`; if(quizTimeLeft<=0){ clearInterval(quizTimerInterval); markAnswer(null); } },1000);
+}
+
+function selectAnswer(i,btn){ clearInterval(quizTimerInterval); markAnswer(i); }
+
+function markAnswer(i){
+  const Q = sampleQuestions[quizIndex];
+  const buttons = Array.from(document.querySelectorAll('#quizAnswers .opt'));
+  buttons.forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===Q.a) b.classList.add('correct');
+    if(i===idx && i!==Q.a) b.classList.add('wrong');
+  });
+  // score calc
+  if(i===Q.a){ const gained = 10 + Math.max(0,quizTimeLeft); quizScore += gained; document.getElementById('quizScore').innerText = quizScore; addXP(5); }
+  // next
+  setTimeout(()=>{ quizIndex++; loadQuizQuestion(); },900);
+}
+
+document.getElementById('startQuiz').addEventListener('click', ()=>{ stopReading(); startQuiz(); });
+
+/* ============================
+   CROSSWORD SIMPLIFICADA
+   ============================ */
+const cwAnswers = ['MASSA','FORCA','ACELER']; // three words placed in two rows simple
+function buildCW(){
+  // row1: MASSA (5 cells), blank gap, FORCA (5)
+  const r1 = document.getElementById('cwRow1'); r1.innerHTML='';
+  const word1 = 'MASSA';
+  for(let ch of word1){
+    const cell = document.createElement('div'); cell.className='cw-cell';
+    const inp = document.createElement('input'); inp.maxLength=1; inp.setAttribute('aria-label','letra');
+    cell.appendChild(inp); r1.appendChild(cell);
+  }
+  const gap = document.createElement('div'); gap.style.width='8px'; r1.appendChild(gap);
+  const word2='FORCA';
+  for(let ch of word2){
+    const cell = document.createElement('div'); cell.className='cw-cell';
+    const inp = document.createElement('input'); inp.maxLength=1; inp.setAttribute('aria-label','letra');
+    cell.appendChild(inp); r1.appendChild(cell);
+  }
+  // row2: ACELER (6)
+  const r2 = document.getElementById('cwRow2'); r2.innerHTML='';
+  for(let ch of 'ACELER'){
+    const cell = document.createElement('div'); cell.className='cw-cell';
+    const inp = document.createElement('input'); inp.maxLength=1; inp.setAttribute('aria-label','letra');
+    cell.appendChild(inp); r2.appendChild(cell);
+  }
+  document.getElementById('cwHint').innerText = 'Dica: unidades, grandezas e variação de velocidade.';
+}
+buildCW();
+
+document.getElementById('checkCW').addEventListener('click', ()=>{
+  const rows = [document.querySelectorAll('#cwRow1 .cw-cell input'), document.querySelectorAll('#cwRow2 .cw-cell input')];
+  // check row1 first (MASSA + FORCA)
+  const r1vals = Array.from(rows[0]).slice(0,5).map(i=> (i.value||'').toUpperCase() ).join('');
+  const r1vals2 = Array.from(rows[0]).slice(6).map(i=> (i.value||'').toUpperCase() ).join('');
+  const r2vals = Array.from(rows[1]).map(i=> (i.value||'').toUpperCase() ).join('');
+  if(r1vals===cwAnswers[0] && r1vals2===cwAnswers[1] && r2vals===cwAnswers[2]){
+    document.getElementById('cwHint').innerText = 'Parabéns! Cruzadas corretas.'; addXP(8); addMedal('Cruzadas 1'); renderProfileStats();
+  } else {
+    document.getElementById('cwHint').innerText = 'Algumas letras estão incorretas. Tente novamente.';
+  }
+});
+document.getElementById('revealCW').addEventListener('click', ()=>{
+  const rows = [document.querySelectorAll('#cwRow1 .cw-cell input'), document.querySelectorAll('#cwRow2 .cw-cell input')];
+  Array.from(rows[0]).slice(0,5).forEach((i,j)=>i.value = cwAnswers[0][j]);
+  Array.from(rows[0]).slice(6).forEach((i,j)=>i.value = cwAnswers[1][j]);
+  Array.from(rows[1]).forEach((i,j)=>i.value = cwAnswers[2][j]);
+  document.getElementById('cwHint').innerText = 'Solução revelada.';
+});
+
+/* ============================
+   DESAFIO LÓGICO (simples)
+   ============================ */
+const desafios = [
+  {q:'Sequência: 2,4,8,16, ? (próximo número)', a:'32'},
+  {q:'Se A mente e B fala verdade, quem está dizendo a verdade? (responda com "A", "B", ou "C")', a:'A'}, // simplified
+];
+let desafioIndex=0;
+document.getElementById('startDesafio').addEventListener('click', ()=>{
+  desafioIndex = 0; document.getElementById('desafioQ').innerText = desafios[desafioIndex].q; document.getElementById('desafioAns').innerText = '';
+});
+document.getElementById('checkDesafio').addEventListener('click', ()=>{
+  const ans = prompt('Sua resposta: (texto curto)');
+  if(!ans) return;
+  if(ans.trim().toUpperCase() === desafios[desafioIndex].a.toUpperCase()){
+    document.getElementById('desafioAns').innerText = 'Correto! +12 XP';
+    addXP(12); addMedal('Desafio 1'); renderProfileStats();
+  } else {
+    document.getElementById('desafioAns').innerText = 'Incorreto. Tente novamente.';
+  }
+});
+
+/* ============================
+   LINKS EXTERNOS PARA JOGOS
+   ============================ */
+function openGames(key){
+  const map = {
+    fisica:'https://www.puzzle-maker.com/CW/hF8IY2.html',
+    matematica:'https://www.puzzle-maker.com/CW/h9S9K0.html',
+    quiz:'https://kahoot.com',
+    desafio:'https://www.proprofsgames.com/logic-puzzles/'
+  };
+  stopReading();
+  window.open(map[key]||'#','_blank');
+  // reward small XP
+  addXP(10); addMedal(`played_${key}`);
+  renderProfileStats();
+}
+
+/* ============================
+   PROFILE / MODAL UI
+   ============================ */
+function openModal(type){
+  const modal = document.getElementById('modal'); const body = document.getElementById('modalBody'); const title = document.getElementById('modalTitle');
+  modal.style.display='flex'; modal.setAttribute('aria-hidden','false');
+  if(type==='signup'){
+    title.innerText='Criar conta / Entrar';
+    body.innerHTML = `
+      <div style="display:grid;gap:8px">
+        <label>Nome</label><input id="mname" placeholder="Seu nome (ex: João)"/>
+        <label>Email</label><input id="memail" placeholder="email@exemplo.com"/>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+          <button class="btn" onclick="saveSignup()">Salvar</button>
+          <button class="btn ghost" onclick="closeModal()">Cancelar</button>
+        </div>
+      </div>
+    `;
+  } else if(type==='profile'){
+    title.innerText='Perfil';
+    const profile = JSON.parse(localStorage.getItem('exatalab_profile')||'{}');
+    body.innerHTML = `
+      <div style="display:grid;gap:8px">
+        <label>Nome</label><input id="editName" value="${profile.name||''}"/>
+        <label>Email</label><input id="editEmail" value="${profile.email||''}"/>
+        <label>XP</label><input id="editXP" value="${profile.xp||0}" type="number"/>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+          <button class="btn" onclick="saveProfileEdit()">Salvar</button>
+          <button class="btn ghost" onclick="closeModal()">Fechar</button>
+        </div>
+      </div>
+    `;
+  } else if(type==='upload'){
+    title.innerText='Enviar material';
+    body.innerHTML = `
+      <div style="display:grid;gap:8px">
+        <label>Título</label><input id="fileTitle" placeholder="Ex: Plano de aula - Cinemática"/>
+        <label>Arquivo (simulação)</label><input id="fileInput" type="file"/>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn" onclick="fakeUpload()">Enviar</button>
+          <button class="btn ghost" onclick="closeModal()">Cancelar</button>
+        </div>
+      </div>
+    `;
+  } else if(type==='adminImport'){
+    title.innerText='Importar Conteúdo (mock)';
+    body.innerHTML = `
+      <div style="display:grid;gap:8px">
+        <p class="small">Simulação de import. Upload real requer backend.</p>
+        <label>JSON de conteúdo</label><textarea id="importJson" style="min-height:140px"></textarea>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn" onclick="fakeImport()">Importar</button>
+          <button class="btn ghost" onclick="closeModal()">Cancelar</button>
+        </div>
+      </div>
+    `;
+  } else if(type==='adminStats'){
+    title.innerText='Estatísticas (mock)';
+    const xp = parseInt(localStorage.getItem('exatalab_global_xp')||'0');
+    const users = JSON.parse(localStorage.getItem('exatalab_board')||'[]').length;
+    body.innerHTML = `<div><p class="small">XP total acumulado: <strong>${xp}</strong></p><p class="small">Jogadores registrados (local): <strong>${users}</strong></p></div>`;
+  } else if(type==='train'){
+    title.innerText='Cursos & Treinamentos';
+    body.innerHTML = `<div><p class="small">Em breve: trilhas, webinars e certificados.</p></div>`;
+  } else if(type==='forum'){
+    title.innerText='Fórum (simulado)';
+    body.innerHTML = `<div><p class="small">Fórum integrado disponível em próxima versão com login.</p></div>`;
+  } else if(type==='guides'){
+    title.innerText='Guias Rápidos';
+    body.innerHTML = `<div><p class="small">Exemplos de planos de aula, exercícios e soluções resumidas.</p></div>`;
+  } else {
+    title.innerText='Modal';
+    body.innerHTML = `<div><p class="small">Conteúdo</p></div>`;
+  }
+}
+
+function closeModal(){ const modal = document.getElementById('modal'); modal.style.display='none'; modal.setAttribute('aria-hidden','true'); }
+
+/* modal helpers */
+function saveSignup(){
+  const name = document.getElementById('mname').value.trim(); const email = document.getElementById('memail').value.trim();
+  if(!name || !email){ alert('Preencha nome e email'); return; }
+  const profile = { name, email, xp:0, medals:[] };
+  saveProfile(profile);
+  addToBoard(name, 0);
+  alert('Conta criada (local).'); closeModal(); renderProfileStats();
+}
+
+/* profile edit save */
+function saveProfileEdit(){
+  const name = document.getElementById('editName').value.trim(); const email = document.getElementById('editEmail').value.trim();
+  const xp = parseInt(document.getElementById('editXP').value||'0');
+  const p = JSON.parse(localStorage.getItem('exatalab_profile')||'{}'); p.name = name; p.email = email; p.xp = xp;
+  saveProfile(p); alert('Perfil atualizado.'); closeModal(); renderProfileStats();
+}
+
+/* fake upload/import */
+function fakeUpload(){
+  const title = document.getElementById('fileTitle').value.trim();
+  if(!title) { alert('Dê um título'); return; }
+  // simulate successful upload
+  addXP(6); addMedal('Upload'); alert(`Arquivo "${title}" enviado (simulado).`); closeModal(); renderProfileStats();
+}
+function fakeImport(){
+  const j = document.getElementById('importJson').value || '';
+  if(!j) { alert('Cole JSON'); return; }
+  try{ JSON.parse(j); alert('Import simulado realizado.'); closeModal(); } catch(e){ alert('JSON inválido'); }
+}
+
+/* ============================
+   PROFILE RENDER helpers
+   ============================ */
+function renderProfileStats(){
+  const p = JSON.parse(localStorage.getItem('exatalab_profile')||'{}') || {};
+  document.getElementById('displayName').innerText = p.name || 'Visitante';
+  document.getElementById('displayEmail').innerText = p.email || '—';
+  document.getElementById('avatar').innerText = (p.name||'M').slice(0,1).toUpperCase();
+  document.getElementById('xp').innerText = p.xp || 0;
+  document.getElementById('medalCount').innerText = (p.medals||[]).length;
+  document.getElementById('statXP').innerText = parseInt(localStorage.getItem('exatalab_global_xp')||'0');
+}
+renderProfileStats();
+
+/* ============================
+   LEADERBOARD PROMPT after quiz
+   ============================ */
+function addToBoardPrompt(){
+  const name = (JSON.parse(localStorage.getItem('exatalab_profile')||'{}')||{}).name || prompt('Fim do Quiz! Digite seu nome para o leaderboard:','Visitante');
+  if(name) addToBoard(name, quizScore);
+  renderBoard();
+}
+
+/* ============================
+   INIT misc events
+   ============================ */
+function fakeDownload(name){ alert(`Download simulado: ${name}`); }
+document.querySelectorAll('[data-game]').forEach(b=>b.addEventListener('click', (e)=> openGames(b.getAttribute('data-game'))));
+document.querySelectorAll('.card .btn, .card .btn.ghost').forEach(b=> b.addEventListener('click', ()=> stopReading() ));
+
+/* ensure board rendered after possible updates */
+renderBoard();
+
+/* accessibility: stop reading when click nav or footer links */
+document.querySelectorAll('nav a, footer a').forEach(a=> a.addEventListener('click', stopReading));
+
+/* respond to voice select change */
+document.getElementById('voiceSelect').addEventListener('change', ()=>{
+  // if currently speaking, stop to apply new voice next play
+  stopReading();
+});
+
+/* initial stats setup */
+if(!localStorage.getItem('exatalab_global_xp')) localStorage.setItem('exatalab_global_xp','0');
+document.getElementById('statUsers').innerText = (JSON.parse(localStorage.getItem('exatalab_board')||'[]').length || 0);
+
+/* ============================
+   SAFEGUARDS & polishing
+   ============================ */
+window.addEventListener('beforeunload', ()=> { stopReading(); });
+
+/* small helper to update profile UI when XP or medals change by other flows */
+const originalAddXP = addXP;
+addXP = function(amount){
+  originalAddXP(amount);
+  renderProfileStats();
+};
+const originalAddMedal = addMedal;
+addMedal = function(name){
+  originalAddMedal(name);
+  renderProfileStats();
+};
+
+/* expose some helpers for console/testing */
+window.EX = {
+  addXP, addMedal, openModal, addToBoard, renderBoard, stopReading, playOrPauseReading
+};
+
+</script>
 </body>
 </html>
