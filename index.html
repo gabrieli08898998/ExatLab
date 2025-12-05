@@ -13,18 +13,16 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-        /* ============================================
-           ESTILO GERAL
-        ============================================ */
+        /* ESTILO GERAL */
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f5f7fb;
+            background: #eef2f7;
             color: #333;
             margin: 0;
             transition: background 0.3s, color 0.3s;
         }
 
-        /* MODO ALTO CONTRASTE */
+        /* ALTO CONTRASTE */
         body.high-contrast {
             background: #000 !important;
             color: #fff !important;
@@ -35,17 +33,15 @@
             background: #000 !important;
         }
 
-        /* ============================================
-           NAVBAR
-        ============================================ */
+        /* NAVBAR */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 10%;
-            background: #1f4e9e;
+            padding: 18px 10%;
+            background: linear-gradient(90deg, #1f4e9e, #163e7e);
             color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
             position: sticky;
             top: 0;
             z-index: 999;
@@ -54,24 +50,19 @@
         nav ul {
             display: flex;
             list-style: none;
-            gap: 30px;
+            gap: 35px;
         }
 
         nav ul li a {
             color: white;
             font-weight: 600;
             text-decoration: none;
-            transition: color .3s;
+            transition: .3s;
+            font-size: 1rem;
         }
 
         nav ul li a:hover {
             color: #36d684;
-        }
-
-        /* Botões de acessibilidade */
-        .acessibilidade {
-            display: flex;
-            gap: 10px;
         }
 
         .acessibilidade button {
@@ -82,7 +73,7 @@
             cursor: pointer;
             color: white;
             font-size: .9rem;
-            transition: transform .2s, background .2s;
+            transition: .2s;
         }
 
         .acessibilidade button:hover {
@@ -90,24 +81,29 @@
             transform: scale(1.05);
         }
 
-        /* ============================================
-           HEADER
-        ============================================ */
+        /* HEADER */
         header {
+            padding: 130px 8%;
             text-align: center;
-            padding: 120px 8%;
-            background: linear-gradient(135deg, #1f4e9e, #193c78);
+            background: linear-gradient(135deg, #1f4e9e, #102c55);
             color: white;
-            animation: fadeIn 1s ease-in-out;
+            animation: fadeInPage 1s ease-in-out;
         }
 
-        @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(30px);}
-            to {opacity: 1; transform: translateY(0);}
+        @keyframes fadeInPage {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         header h1 {
-            font-size: 3.4rem;
+            font-size: 3.5rem;
             font-weight: 700;
         }
 
@@ -116,38 +112,50 @@
         }
 
         header p {
-            font-size: 1.3rem;
-            margin-top: 10px;
-            opacity: .9;
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-top: 12px;
         }
 
         .btn-main {
-            margin-top: 25px;
-            padding: 15px 35px;
-            font-size: 1.2rem;
+            margin-top: 30px;
+            padding: 16px 40px;
+            font-size: 1.25rem;
             background: #36d684;
             border: none;
             color: white;
             border-radius: 30px;
             cursor: pointer;
-            transition: transform .2s;
+            font-weight: 600;
+            transition: .25s;
         }
 
         .btn-main:hover {
             transform: scale(1.08);
+            background: #2db671;
         }
 
-        /* ============================================
-           SEÇÕES
-        ============================================ */
+        /* SEÇÕES */
         section {
             padding: 80px 10%;
-            animation: fadeIn 0.8s ease forwards;
+            animation: fadeInSection .8s ease;
+        }
+
+        @keyframes fadeInSection {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h2 {
             color: #1f4e9e;
-            font-size: 2.2rem;
+            font-size: 2.3rem;
             margin-bottom: 25px;
             position: relative;
         }
@@ -160,60 +168,52 @@
             position: absolute;
             left: 0;
             bottom: -10px;
+            border-radius: 6px;
         }
 
-        /* ============================================
-           CRONOGRAMA
-        ============================================ */
+        /* CRONOGRAMA */
         .cronograma {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 22px;
         }
 
         .dia {
             background: white;
             padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
-            transition: transform .3s;
+            border-radius: 15px;
+            box-shadow: 0px 4px 25px rgba(0, 0, 0, .1);
+            transition: .3s;
         }
 
         .dia:hover {
-            transform: translateY(-6px);
+            transform: translateY(-8px);
         }
 
-        .dia h3 {
-            color: #1f4e9e;
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-        }
-
-        /* ============================================
-           CARDS DE GAMIFICAÇÃO
-        ============================================ */
+        /* CARDS */
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+            gap: 30px;
+            margin-top: 40px;
         }
 
         .card {
             background: white;
-            padding: 25px;
-            border-radius: 12px;
+            padding: 30px;
+            border-radius: 16px;
             text-align: center;
-            box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
-            transition: transform .3s;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, .1);
+            transition: .3s;
         }
 
         .card:hover {
-            transform: scale(1.05);
+            transform: scale(1.06);
         }
 
-        . card i {
-            font-size: 2rem;
+        .card i {
+            font-size: 2.5rem;
+            color: #1f4e9e;
         }
 
         button.game-btn {
@@ -224,7 +224,7 @@
             color: white;
             border-radius: 10px;
             cursor: pointer;
-            transition: background .2s, transform .2s;
+            transition: .2s;
         }
 
         button.game-btn:hover {
@@ -232,21 +232,17 @@
             transform: scale(1.05);
         }
 
-        /* ============================================
-           FOOTER
-        ============================================ */
+        /* FOOTER */
         footer {
             background: #1f4e9e;
             color: white;
             padding: 50px 10%;
             margin-top: 40px;
+            text-align: center;
         }
 
-        footer a {
-            color: white;
-            text-decoration: none;
-            margin-bottom: 7px;
-            display: block;
+        footer h3 {
+            margin-bottom: 10px;
         }
 
         .copyright {
@@ -269,25 +265,23 @@
         </div>
     </div>
 
-    <!-- NAVBAR -->
     <nav>
         <ul>
-            <li><a href="#cronograma">Cronograma</a></li>
-            <li><a href="#calendario">Calendário</a></li>
-            <li><a href="#gamificacao">Games</a></li>
+            <li><a href="#cronograma" onclick="stopReading()">Cronograma</a></li>
+            <li><a href="#calendario" onclick="stopReading()">Calendário</a></li>
+            <li><a href="#gamificacao" onclick="stopReading()">Games</a></li>
         </ul>
 
         <div class="acessibilidade">
-            <button onclick="toggleContrast()">Alto Contraste</button>
+            <button onclick="toggleContrast(); stopReading()">Alto Contraste</button>
             <button onclick="lerPagina()">Ler Página</button>
         </div>
     </nav>
 
-    <!-- HEADER -->
     <header>
         <h1>Suporte para Monitores <span>Exata Lab</span></h1>
         <p>Ferramentas e suporte para elevar seu potencial como monitor.</p>
-        <button class="btn-main">Explorar Suporte</button>
+        <button class="btn-main" onclick="stopReading()">Explorar Suporte</button>
     </header>
 
     <!-- CRONOGRAMA -->
@@ -299,25 +293,21 @@
                 <p>Monitor: João da Silva</p>
                 <p>Atividade: Física - Cinemática</p>
             </div>
-
             <div class="dia">
                 <h3>Terça-feira</h3>
                 <p>Monitor: Maria Oliveira</p>
                 <p>Atividade: Matemática - Álgebra</p>
             </div>
-
             <div class="dia">
                 <h3>Quarta-feira</h3>
                 <p>Monitor: Pedro Souza</p>
                 <p>Atividade: Física - Leis de Newton</p>
             </div>
-
             <div class="dia">
                 <h3>Quinta-feira</h3>
                 <p>Monitor: Ana Lima</p>
                 <p>Atividade: Matemática - Equações Diferenciais</p>
             </div>
-
             <div class="dia">
                 <h3>Sexta-feira</h3>
                 <p>Monitor: Carlos Martins</p>
@@ -345,33 +335,32 @@
                 <i class="ri-grid-fill"></i>
                 <h4>Palavras Cruzadas - Física</h4>
                 <p>Descubra conceitos fundamentais brincando.</p>
-                <button class="game-btn">Jogar</button>
+                <button class="game-btn" onclick="stopReading()">Jogar</button>
             </div>
 
             <div class="card">
                 <i class="ri-function-line"></i>
                 <h4>Palavras Cruzadas - Matemática</h4>
                 <p>Desafios para ativar o raciocínio lógico.</p>
-                <button class="game-btn">Jogar</button>
+                <button class="game-btn" onclick="stopReading()">Jogar</button>
             </div>
 
             <div class="card">
                 <i class="ri-question-answer-line"></i>
                 <h4>Quiz</h4>
                 <p>Teste sua mente e lidere o ranking!</p>
-                <button class="game-btn">Iniciar Quiz</button>
+                <button class="game-btn" onclick="stopReading()">Iniciar Quiz</button>
             </div>
 
             <div class="card">
                 <i class="ri-brain-line"></i>
                 <h4>Desafio Lógico</h4>
                 <p>Problemas para desafiar sua lógica.</p>
-                <button class="game-btn">Resolver</button>
+                <button class="game-btn" onclick="stopReading()">Resolver</button>
             </div>
         </div>
     </section>
 
-    <!-- RODAPÉ -->
     <footer>
         <h3>ExataLab • 2025</h3>
         <p>Conectando monitores e transformando o aprendizado.</p>
@@ -384,15 +373,24 @@
     <script>
         new window.VLibras.Widget('https://vlibras.gov.br/app');
 
-        function toggleContrast() {
-            document.body.classList.toggle("high-contrast");
-        }
+        let leitura;
 
         function lerPagina() {
+            stopReading();
             const texto = document.body.innerText;
-            const speak = new SpeechSynthesisUtterance(texto);
-            speak.lang = "pt-BR";
-            window.speechSynthesis.speak(speak);
+            leitura = new SpeechSynthesisUtterance(texto);
+            leitura.lang = "pt-BR";
+            window.speechSynthesis.speak(leitura);
+        }
+
+        function stopReading() {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function toggleContrast() {
+            document.body.classList.toggle("high-contrast");
         }
     </script>
 
